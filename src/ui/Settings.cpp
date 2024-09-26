@@ -217,10 +217,6 @@ void ShowVideoSettings()
         {
             glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_TRUE);
         }
-
-        // Apply brightness (for OpenGL)
-        // Adjust gamma correction or apply brightness through a shader
-        // Example: glClearColor(brightness * 0.5f, brightness * 0.5f, brightness * 0.5f, 1.0f);
     }
 }
 

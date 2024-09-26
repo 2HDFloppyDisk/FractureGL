@@ -45,12 +45,6 @@ void SetupScene(Camera& camera, int windowWidth, int windowHeight) {
         return;
     }
 
-    // Initialize cube (VAO/VBO setup)
-    //InitCube();
-
-    // Initialize arrow (VAO/VBO setup)
-    //InitArrow(camera.GetPosition(), camera.GetDirection());
-
     // Initialize particle systems (dust and fog particles)
     InitDustParticles(windowWidth, windowHeight);
     InitFogParticles(windowWidth, windowHeight);
@@ -63,67 +57,8 @@ void RenderScene(Camera& camera, GLuint fogShaderProgram, GLuint arrowShaderProg
     // Clear the color and depth buffers
     glEnable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // Clear both the color and depth buffer
-    //glDisable(GL_CULL_FACE);  // Disable face culling
 
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);  // Restore fill mode
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);  // Set background to gray
-
-    // Get view and projection matrices from the camera
-    //glm::mat4 view = camera.GetViewMatrix();
-    //glm::mat4 projection = camera.GetProjectionMatrix(90.0f, 1280.0f / 720.0f, 0.1f, 100.0f);  // Set FOV to 90 degrees
-
-    // Use the arrow shader and set up the view/projection matrices
-    //glUseProgram(arrowShaderProgram);
-    //glUniformMatrix4fv(glGetUniformLocation(arrowShaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
-    //glUniformMatrix4fv(glGetUniformLocation(arrowShaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-
-    // Render the arrow (assumes arrow points from camera direction)
-    //RenderArrow(arrowShaderProgram, camera.GetPosition(), camera.GetDirection());
-
-    //glUseProgram(0);  // Stop using the shader after drawing
-
-    // Use the fog shader program and set the view/projection matrices
-    //debugMessages.push_back("Before using fogShaderProgram");
-    //glUseProgram(fogShaderProgram);
-    //CheckOpenGLError("After using fogShaderProgram");
-    //glUniformMatrix4fv(glGetUniformLocation(fogShaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
-    //glUniformMatrix4fv(glGetUniformLocation(fogShaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-
-    //CheckOpenGLError("OpenGL error after glUseProgram: ");
-    
-    // Render the cube
-    //debugMessages.push_back("Before rendering cube");
-    //glBindVertexArray(VAO);  // Bind the correct VAO before drawing
-    //RenderCube(fogShaderProgram, camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z);
-    //CheckOpenGLError("After rendering cube");
-
-    // Apply translation and scaling to the cube
-    //glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -1.0f));  // Move the cube closer to the camera
-    //model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));  // Scale the cube down
-    //glUniformMatrix4fv(glGetUniformLocation(fogShaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
-
-    // Pass camera position to the fog shader
-    //glUniform3f(glGetUniformLocation(fogShaderProgram, "cameraPos"), camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z);
-
-
-
-    /*
-    // Render 100 cubes around the camera
-    for (int i = 0; i < 100; i++) {
-        glm::vec3 randomPosition = camera.GetPosition() + glm::vec3(
-            (rand() % 20 - 10),   // Random x between -10 and 10
-            (rand() % 20 - 10),   // Random y between -10 and 10
-            (rand() % 20 - 10));  // Random z between -10 and 10
-
-        glm::mat4 model = glm::translate(glm::mat4(1.0f), randomPosition);  // Move the cube to a random position
-        model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));  // Scale the cube down
-        glUniformMatrix4fv(glGetUniformLocation(fogShaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
-
-        // Render the cube
-        RenderCube(fogShaderProgram, randomPosition.x, randomPosition.y, randomPosition.z);
-    }
-    */
-
 
     GLint isProgramValid;
     glValidateProgram(fogShaderProgram);
