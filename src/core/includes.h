@@ -25,28 +25,28 @@
 #include <assimp/postprocess.h>
 
 // Game-specific includes
-#include "Settings.h"          // Game settings management
-#include "Gameplay.h"          // Gameplay functionality
-#include "MainMenu.h"          // Main menu management
-#include "GUIStyle.h"          // GUI styling
-#include "Credits.h"           // Credits screen functionality
-#include "BackgroundVFX.h"     // Background visual effects
-#include "ShaderUtils.h"       // Shader utilities for loading shaders
-#include "LogUtils.h"          // Custom logging utilities
-#include "SimpleCube.h"        // Rendering a simple cube
-#include "Camera.h"            // Camera functionality
-#include "SimpleArrow.h"       // Arrow rendering functionality
-#include "GameStateHandler.h"  // Game state management
+#include "../ui/Settings.h"          // Game settings management
+#include "../gameplay/Gameplay.h"          // Gameplay functionality
+#include "../ui/MainMenu.h"          // Main menu management
+#include "../ui/GUIStyle.h"          // GUI styling
+#include "../ui/Credits.h"           // Credits screen functionality
+#include "../ui/BackgroundVFX.h"     // Background visual effects
+#include "../graphics/ShaderUtils.h"       // Shader utilities for loading shaders
+#include "../utils/LogUtils.h"          // Custom logging utilities
+#include "../entities/SimpleCube.h"        // Rendering a simple cube
+#include "../camera/Camera.h"            // Camera functionality
+#include "../entities/SimpleArrow.h"       // Arrow rendering functionality
+#include "../gameplay/GameStateHandler.h"  // Game state management
 
 // Custom modular headers
-#include "Render.h"        // Rendering system
-#include "Input.h"         // Input handling system
-#include "DebugUI.h"       // Debugging UI components
-#include "CameraManager.h" // Camera management
-#include "ModelLoader.h"   // For model loading (e.g., FBX)
-#include "CoreUI.h"        // Core UI elements (ImGui)
-#include "GLUtils.h"       // OpenGL utilities and helpers
-#include "FMODManager.h"
+#include "../graphics/Render.h"        // Rendering system
+#include "../input/Input.h"         // Input handling system
+#include "../ui/DebugUI.h"       // Debugging UI components
+#include "../camera/CameraManager.h" // Camera management
+#include "../models/ModelLoader.h"   // For model loading (e.g., FBX)
+#include "../core/CoreUI.h"        // Core UI elements (ImGui)
+#include "../graphics/GLUtils.h"       // OpenGL utilities and helpers
+#include "../audio/FMODManager.h"
 
 
 #endif // INCLUDES_H

@@ -1,8 +1,8 @@
 #include <GLFW/glfw3.h>
 #include <imgui/imgui.h>
-#include "MainMenu.h"
-#include "GameStateHandler.h"
-#include "Gameplay.h"
+#include "../ui/MainMenu.h"
+#include "../gameplay/GameStateHandler.h"
+#include "../gameplay/Gameplay.h"
 #include <cstdlib>  // Include for rand()
 
 extern GameState currentState;

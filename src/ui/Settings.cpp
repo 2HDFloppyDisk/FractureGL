@@ -5,8 +5,8 @@
 #include <vector> 
 #include <string>
 #include <set>
-#include "Settings.h"
-#include "GameStateHandler.h"
+#include "../ui/Settings.h"
+#include "../gameplay/GameStateHandler.h"
 
 
 extern GameState currentState;

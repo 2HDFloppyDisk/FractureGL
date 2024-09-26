@@ -1,8 +1,8 @@
 #include <GLFW/glfw3.h>
-#include "MainMenu.h"
-#include "Credits.h"
-#include "Settings.h"
-#include "GameStateHandler.h"
+#include "../ui/MainMenu.h"
+#include "../ui/Credits.h"
+#include "../ui/Settings.h"
+#include "../gameplay/GameStateHandler.h"
 
 extern GameState currentState;
 

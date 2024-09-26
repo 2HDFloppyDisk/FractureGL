@@ -1,6 +1,6 @@
 #include <imgui/imgui.h>
-#include "LogUtils.h"
-#include "DebugUI.h"
+#include "../utils/LogUtils.h"
+#include "../ui/DebugUI.h"
 
 //std::vector<std::string> debugMessages;
 

@@ -1,6 +1,6 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "LogUtils.h"
+#include "../utils/LogUtils.h"
 
 GLFWwindow* InitGLFW(const char* windowTitle, int width, int height) {
     if (!glfwInit()) {

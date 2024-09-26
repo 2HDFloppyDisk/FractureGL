@@ -3,10 +3,10 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
-#include "GUIStyle.h"
-#include "LogUtils.h"
-#include "GameStateHandler.h"
-#include "DebugUI.h"
+#include "../ui/GUIStyle.h"
+#include "../utils/LogUtils.h"
+#include "../gameplay/GameStateHandler.h"
+#include "../ui/DebugUI.h"
 
 
 

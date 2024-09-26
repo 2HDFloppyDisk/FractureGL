@@ -1,14 +1,14 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "CameraManager.h"  // Update to CameraManager
-#include "GLUtils.h"
-#include "LogUtils.h"
-#include "SimpleCube.h"
-#include "BackgroundVFX.h"
-#include "Render.h"
+#include "../camera/CameraManager.h"  // Update to CameraManager
+#include "../graphics/GLUtils.h"
+#include "../utils/LogUtils.h"
+#include "../entities/SimpleCube.h"
+#include "../ui/BackgroundVFX.h"
+#include "../graphics/Render.h"
 #include "ShaderUtils.h"
-#include "SimpleArrow.h"
-#include "ModelLoader.h"
+#include "../entities/SimpleArrow.h"
+#include "../models/ModelLoader.h"
 
 unsigned int VAO = 0;  // Define the variables
 unsigned int VBO = 0;

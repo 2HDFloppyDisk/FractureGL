@@ -1,7 +1,7 @@
 #ifndef RENDER_H
 #define RENDER_H
 
-#include "CameraManager.h"  // Include CameraManager instead of Camera directly
+#include "../camera/CameraManager.h"  // Include CameraManager instead of Camera directly
 
 extern GLuint fogShaderProgram;
 extern GLuint arrowShaderProgram;

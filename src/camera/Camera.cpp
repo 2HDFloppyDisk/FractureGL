@@ -1,8 +1,8 @@
-#include "Camera.h"
+#include "../camera/Camera.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/glm.hpp>
-#include "LogUtils.h"
+#include "../utils/LogUtils.h"
 
 // Constructor with initial values
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)

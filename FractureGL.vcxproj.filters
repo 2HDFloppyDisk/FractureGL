@@ -18,9 +18,6 @@
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Libraries\include\imgui\imgui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -42,67 +39,70 @@
     <ClCompile Include="Libraries\include\imgui\imgui_impl_glfw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Settings.cpp">
+    <ClCompile Include="src\utils\LogUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Gameplay.cpp">
+    <ClCompile Include="src\ui\BackgroundVFX.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MainMenu.cpp">
+    <ClCompile Include="src\ui\Credits.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GUIStyle.cpp">
+    <ClCompile Include="src\ui\DebugUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Credits.cpp">
+    <ClCompile Include="src\ui\GUIStyle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BackgroundVFX.cpp">
+    <ClCompile Include="src\ui\MainMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderUtils.cpp">
+    <ClCompile Include="src\ui\Settings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LogUtils.cpp">
+    <ClCompile Include="src\models\ModelLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SimpleCube.cpp">
+    <ClCompile Include="src\input\Input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
+    <ClCompile Include="src\graphics\GLUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SimpleArrow.cpp">
+    <ClCompile Include="src\graphics\Render.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Render.cpp">
+    <ClCompile Include="src\graphics\ShaderUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Input.cpp">
+    <ClCompile Include="src\gameplay\Gameplay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DebugUI.cpp">
+    <ClCompile Include="src\gameplay\GameStateHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CameraManager.cpp">
+    <ClCompile Include="src\entities\SimpleArrow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ModelLoader.cpp">
+    <ClCompile Include="src\entities\SimpleCube.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CoreUI.cpp">
+    <ClCompile Include="src\core\CoreUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GLUtils.cpp">
+    <ClCompile Include="src\core\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameStateHandler.cpp">
+    <ClCompile Include="src\camera\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FMODManager.cpp">
+    <ClCompile Include="src\camera\CameraManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="embedded_audio.cpp">
+    <ClCompile Include="src\audio\embedded_audio.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio\FMODManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -134,70 +134,70 @@
     <ClInclude Include="Libraries\include\imgui\imgui_impl_opengl3_loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Settings.h">
+    <ClInclude Include="src\audio\embedded_audio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Gameplay.h">
+    <ClInclude Include="src\audio\FMODManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MainMenu.h">
+    <ClInclude Include="src\camera\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GUIStyle.h">
+    <ClInclude Include="src\camera\CameraManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Credits.h">
+    <ClInclude Include="src\core\CoreUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BackgroundVFX.h">
+    <ClInclude Include="src\core\includes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ShaderUtils.h">
+    <ClInclude Include="src\entities\SimpleArrow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LogUtils.h">
+    <ClInclude Include="src\entities\SimpleCube.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SimpleCube.h">
+    <ClInclude Include="src\gameplay\Gameplay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
+    <ClInclude Include="src\gameplay\GameStateHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SimpleArrow.h">
+    <ClInclude Include="src\graphics\GLUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="includes.h">
+    <ClInclude Include="src\graphics\Render.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Render.h">
+    <ClInclude Include="src\graphics\ShaderUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Input.h">
+    <ClInclude Include="src\input\Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DebugUI.h">
+    <ClInclude Include="src\models\ModelLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CameraManager.h">
+    <ClInclude Include="src\ui\BackgroundVFX.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ModelLoader.h">
+    <ClInclude Include="src\ui\Credits.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CoreUI.h">
+    <ClInclude Include="src\ui\DebugUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GLUtils.h">
+    <ClInclude Include="src\ui\GUIStyle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameStateHandler.h">
+    <ClInclude Include="src\ui\MainMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FMODManager.h">
+    <ClInclude Include="src\ui\Settings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="embedded_audio.h">
+    <ClInclude Include="src\utils\LogUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
