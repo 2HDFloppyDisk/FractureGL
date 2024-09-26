@@ -1,7 +1,7 @@
 #include <string>
 #include <vector>
 #include "imgui/imgui.h"
-#include "../utils/LogUtils.h"
+#include "utils/LogUtils.h"
 
 // Global vector to store debug messages for the UI
 std::vector<std::string> debugMessages;

@@ -1,8 +1,8 @@
 #include <GLFW/glfw3.h>
-#include "../camera/Camera.h"
-#include "../input/Input.h"
-#include "../camera/CameraManager.h"
-#include "../gameplay/GameStateHandler.h"
+#include "camera/Camera.h"
+#include "input/Input.h"
+#include "camera/CameraManager.h"
+#include "gameplay/GameStateHandler.h"
 
 // Global variables for tracking mouse position
 float lastX = 1280.0f / 2.0f;

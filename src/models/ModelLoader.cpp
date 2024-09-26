@@ -2,8 +2,8 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-#include "../utils/LogUtils.h"
-#include "../models/ModelLoader.h"
+#include "utils/LogUtils.h"
+#include "models/ModelLoader.h"
 
 // Constructor
 ModelLoader::ModelLoader() {}

@@ -1,7 +1,7 @@
-#include "../gameplay/Gameplay.h"
-#include "../audio/FMODManager.h"
-#include "../utils/LogUtils.h"
-#include "../audio/embedded_audio.h"
+#include "gameplay/Gameplay.h"
+#include "audio/FMODManager.h"
+#include "utils/LogUtils.h"
+#include "audio/embedded_audio.h"
 #include <thread>   // For std::this_thread::sleep_for
 #include <chrono>   // For std::chrono::milliseconds
 

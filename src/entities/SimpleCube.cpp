@@ -1,8 +1,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-#include "../entities/SimpleCube.h"
-#include "../utils/LogUtils.h"
+#include "entities/SimpleCube.h"
+#include "utils/LogUtils.h"
 
 // Function to initialize the cube (run this once)
 void InitCube() {

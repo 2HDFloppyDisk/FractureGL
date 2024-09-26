@@ -1,4 +1,4 @@
-#include "includes.h"
+#include "core/includes.h"
 
 GameState currentState = GameState::MAIN_MENU;
 
@@ -20,6 +20,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     if (!window) return -1;
 
     if (!InitGLEW()) return -1;
+
+    ShowSplashScreen();
 
     // Setup ImGui context
     InitImGui(window);

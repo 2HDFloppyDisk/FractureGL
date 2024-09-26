@@ -1,4 +1,4 @@
-#include "CameraManager.h"
+#include "camera/CameraManager.h"
 
 // Constructor
 CameraManager::CameraManager() {}

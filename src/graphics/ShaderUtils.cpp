@@ -1,8 +1,8 @@
 #include <GL/glew.h>
 #include <fstream>
 #include <sstream>
-#include "../utils/LogUtils.h"
-#include "../graphics/ShaderUtils.h"
+#include "utils/LogUtils.h"
+#include "graphics/ShaderUtils.h"
 
 
 std::string LoadShaderSource(const char* filePath) {

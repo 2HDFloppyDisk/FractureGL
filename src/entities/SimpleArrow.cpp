@@ -1,9 +1,9 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-#include "../entities/SimpleArrow.h"
-#include "../models/ModelLoader.h"
-#include "../utils/LogUtils.h"
+#include "entities/SimpleArrow.h"
+#include "models/ModelLoader.h"
+#include "utils/LogUtils.h"
 
 void InitArrow(glm::vec3 cameraPos, glm::vec3 cameraFront) {
     // Generate and bind the arrow VAO

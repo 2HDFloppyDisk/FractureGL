@@ -3,13 +3,10 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
-#include "../ui/GUIStyle.h"
-#include "../utils/LogUtils.h"
-#include "../gameplay/GameStateHandler.h"
-#include "../ui/DebugUI.h"
-
-
-
+#include "ui/GUIStyle.h"
+#include "utils/LogUtils.h"
+#include "gameplay/GameStateHandler.h"
+#include "ui/DebugUI.h"
 
 extern GLFWwindow* window;
 
@@ -25,7 +22,7 @@ void InitImGui(GLFWwindow* window) {
     // Apply the custom SWG style for the UI
     ApplySWGStyle();  // Ensure the custom style is applied
 
-    debugMessages.push_back("ImGui initialized");
+    debugMessages.push_back("UI initialized");
 }
 
 // Render ImGui frame
@@ -70,5 +67,5 @@ void CleanupImGui() {
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 
-    debugMessages.push_back("ImGui cleaned up");
+    debugMessages.push_back("UI cleaned up");
 }

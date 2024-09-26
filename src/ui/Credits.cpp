@@ -1,7 +1,7 @@
 #include <GLFW/glfw3.h>
 #include <imgui/imgui.h>
-#include "../ui/Credits.h"
-#include "../gameplay/GameStateHandler.h"
+#include "ui/Credits.h"
+#include "gameplay/GameStateHandler.h"
 
 extern GameState currentState;
 extern GLFWwindow* window;  // Reference to the GLFW window

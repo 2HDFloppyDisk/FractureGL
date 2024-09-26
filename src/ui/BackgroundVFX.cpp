@@ -4,10 +4,10 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
-#include "BackgroundVFX.h"
+#include "ui/BackgroundVFX.h"
 #include <vector>
 #define STB_IMAGE_IMPLEMENTATION
-#include <stb/stb_image.h>    // For loading images (make sure stb_image.h is included in your project)
+//#include <stb/stb_image.h>    // For loading images (make sure stb_image.h is included in your project)
 
 
 

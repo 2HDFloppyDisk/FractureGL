@@ -1,7 +1,7 @@
 #ifndef CAMERAMANAGER_H
 #define CAMERAMANAGER_H
 
-#include "Camera.h"
+#include "camera/Camera.h"
 
 class CameraManager {
 private:

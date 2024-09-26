@@ -1,9 +1,8 @@
 #include <GLFW/glfw3.h>
 #include <imgui/imgui.h>
-#include "../ui/MainMenu.h"
-#include "../gameplay/GameStateHandler.h"
-#include "../gameplay/Gameplay.h"
-#include <cstdlib>  // Include for rand()
+#include "ui/MainMenu.h"
+#include "gameplay/GameStateHandler.h"
+#include "gameplay/Gameplay.h"
 
 extern GameState currentState;
 extern GLFWwindow* window;  // Reference to the GLFW window
