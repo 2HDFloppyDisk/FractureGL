@@ -1,19 +1,29 @@
-#ifndef AUDIO_PLAYER_H
-#define AUDIO_PLAYER_H
+#pragma once
 
 #include <string>
+#include <vector>
 
 class AudioPlayer {
 public:
     AudioPlayer();
-    void ShowPlayerUI();          // Displays the audio player UI
-    void LoadEmbeddedAudio();     // Loads embedded audio
+
+    void ShowPlayerUI();           // Renders the player UI
+    void LoadEmbeddedAudio();      // Loads the embedded audio track
+    void UpdateVisualizer();       // Updates visualizer data
+    void SetTrackTime(float time); // Sets track time for display
 
 private:
-    float volume;                 // Player volume
-    std::string currentTrack;     // Current track name
-    bool isPlaying;               // Playback state
-    float equalizer[10]; // Array to store equalizer values for 10 bands
-};
+    static constexpr int numBands = 20;  // Number of bands in the spectrum
+    float spectrum[numBands] = { 0.0f };  // Array to store spectrum data
 
-#endif // AUDIO_PLAYER_H
+    float volume;
+    bool isMuted;
+    float trackTime;
+    float trackLength;
+    std::string currentTrack;
+    bool isPlaying;
+    std::vector<float> visualizerData;
+
+    void ToggleMute();
+    void UpdateSeekBar();
+};

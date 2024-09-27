@@ -19,6 +19,18 @@ void FMODManager::init() {
     else {
         LogToUI("FMOD System initialized successfully.");
     }
+
+    // Create and add FFT DSP to the system
+    result = fmodSystem->createDSPByType(FMOD_DSP_TYPE_FFT, &fftDSP);
+    if (result == FMOD_OK && fftDSP) {
+        fftDSP->setParameterInt(FMOD_DSP_FFT_WINDOWSIZE, 1024);  // Set FFT window size
+        // Get the master channel group and add the DSP
+        FMOD::ChannelGroup* masterGroup = nullptr;
+        fmodSystem->getMasterChannelGroup(&masterGroup);
+        if (masterGroup) {
+            masterGroup->addDSP(0, fftDSP);
+        }
+    }
 }
 
 FMODManager& FMODManager::getInstance() {
@@ -28,6 +40,56 @@ FMODManager& FMODManager::getInstance() {
 
 FMOD::System* FMODManager::getFMODSystem() {
     return fmodSystem;
+}
+
+void FMODManager::SetMute(bool mute) {
+    if (channel) {
+        isMuted = mute;
+        channel->setMute(isMuted);
+        LogToUI(isMuted ? "Audio muted." : "Audio unmuted.");
+    }
+}
+
+void FMODManager::SetPlaybackPosition(float position) {
+    if (channel && sound) {
+        unsigned int length = 0;
+        sound->getLength(&length, FMOD_TIMEUNIT_MS);
+        unsigned int newPosition = static_cast<unsigned int>(position * length);
+        channel->setPosition(newPosition, FMOD_TIMEUNIT_MS);
+        LogToUI("Playback position set to: " + std::to_string(position * 100) + "%.");
+    }
+}
+
+void FMODManager::GetSpectrum(float* spectrum, int numBands) {
+    if (fftDSP) {
+        FMOD_DSP_PARAMETER_FFT* fftData = nullptr;
+        fftDSP->getParameterData(FMOD_DSP_FFT_SPECTRUMDATA, (void**)&fftData, nullptr, nullptr, 0);
+
+        if (fftData && fftData->numchannels > 0) {
+            // Copy the data for the first channel only
+            int numFFTValues = fftData->length / 2;  // Since the spectrum is symmetrical, we only need half
+            for (int i = 0; i < numBands; ++i) {
+                int index = static_cast<int>((i / static_cast<float>(numBands)) * numFFTValues);
+                float value = fftData->spectrum[0][index];  // Use the first channel's spectrum
+
+                // Apply non-linear scaling to enhance sensitivity
+                value = sqrtf(value);  // Example: Square root to exaggerate lower values
+
+                // Optionally, scale the values to increase visual impact
+                value *= 3.0f;  // Increase the multiplier for more sensitivity
+
+                // Manually clamp the values between 0.0f and 1.0f
+                if (value < 0.0f) {
+                    value = 0.0f;
+                }
+                else if (value > 1.0f) {
+                    value = 1.0f;
+                }
+
+                spectrum[i] = value;
+            }
+        }
+    }
 }
 
 void FMODManager::cleanup() {

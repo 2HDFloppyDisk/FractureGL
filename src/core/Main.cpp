@@ -16,7 +16,7 @@ GLFWwindow* window = nullptr;
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 
     // Initialize GLFW and GLEW
-    window = InitGLFW("Game", 1280, 720);
+    window = InitGLFW("OGLAmp", 1280, 720);
     if (!window) return -1;
 
     if (!InitGLEW()) return -1;

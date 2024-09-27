@@ -21,6 +21,9 @@ public:
     bool LoadTrack(const std::string& filePath);
     std::string GetCurrentTrackName();
 
+    void SetMute(bool mute);
+    void SetPlaybackPosition(float position);
+
     // Set the current sound for playback
     void setSound(FMOD::Sound* newSound);
 
@@ -31,18 +34,20 @@ public:
     void Previous();
     void Next();
 
-private:
-    // Private constructor for singleton pattern
-    FMODManager();
+    void GetSpectrum(float* spectrum, int numBands);  // Add this function declaration
 
-    // Disallow copying and assignment
-    FMODManager(const FMODManager&) = delete;
-    FMODManager& operator=(const FMODManager&) = delete;
+private:
+    FMODManager(); // Private constructor for singleton
+    FMODManager(const FMODManager&) = delete; // Delete copy constructor
+    FMODManager& operator=(const FMODManager&) = delete; // Delete assignment operator
 
     // FMOD components
     FMOD::System* fmodSystem;
     FMOD::Sound* sound;
     FMOD::Channel* channel;
+    bool isMuted; // Track mute status
+
+    FMOD::DSP* fftDSP;  // Add this member variable
 };
 
 #endif // FMOD_MANAGER_H

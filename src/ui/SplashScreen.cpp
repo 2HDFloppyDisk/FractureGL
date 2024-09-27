@@ -89,7 +89,7 @@ void ShowSplashScreen() {
     }
 
     // Set logo durations (in seconds)
-    float logoDuration = 5.0f; // Display each logo for 5 seconds
+    float logoDuration = 1.0f; // Display each logo for 5 seconds
     float fadeDuration = 1.0f; // Duration of the fade-in and fade-out effect
     float startTime = glfwGetTime();
 

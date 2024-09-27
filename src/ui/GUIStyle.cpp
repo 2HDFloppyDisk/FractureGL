@@ -42,11 +42,24 @@ void ApplyWinampStyle() {
     style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.45f, 0.45f, 0.45f, 1.0f); // Button hover color
     style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.55f, 0.55f, 0.55f, 1.0f);  // Button active color
     style.Colors[ImGuiCol_Border] = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);  // Border color
+    style.Colors[ImGuiCol_CheckMark] = ImVec4(0.9f, 0.9f, 0.9f, 1.0f);  // Checkmark color (for sliders/equalizer)
+    style.Colors[ImGuiCol_SliderGrab] = ImVec4(0.4f, 0.4f, 0.4f, 1.0f);  // Slider grab color
+    style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.6f, 0.6f, 0.6f, 1.0f);  // Active slider grab
 
     // Rounding and padding to mimic Bento skin
-    style.FrameRounding = 4.0f;
-    style.WindowRounding = 0.0f;
-    style.FramePadding = ImVec2(4, 4);
-    style.ItemSpacing = ImVec2(8, 4);
+    style.FrameRounding = 2.0f;  // Slight rounding for buttons and sliders
+    style.WindowRounding = 0.0f;  // No rounding on main window
+    style.FramePadding = ImVec2(6, 4);  // Padding within frames
+    style.ItemSpacing = ImVec2(8, 4);   // Spacing between items
+    style.WindowPadding = ImVec2(8, 8); // Padding around window edges
+
+    // Border and size adjustments
+    style.FrameBorderSize = 1.0f;  // Add a slight border around frames
+    style.WindowBorderSize = 1.0f; // Border around the window
+
+    // Slider tweaks for equalizer
+    style.GrabMinSize = 8.0f;      // Size of the slider grab
+    style.GrabRounding = 1.0f;     // Slight rounding on the grab for a modern look
 }
+
 
