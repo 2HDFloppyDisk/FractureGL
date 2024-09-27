@@ -399,3 +399,5 @@ FodyWeavers.xsd
 
 images/
 _backups/
+zip_src_files.bat
+copy_src_files.bat
