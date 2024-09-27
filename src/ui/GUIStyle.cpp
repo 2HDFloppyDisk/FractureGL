@@ -29,3 +29,24 @@ void ApplySWGStyle()
     style.ScrollbarSize = 15.0f; // Larger scrollbar for easier navigation
     style.ScrollbarRounding = 2.0f; // Slight rounding for scrollbar
 }
+
+void ApplyWinampStyle() {
+    ImGuiStyle& style = ImGui::GetStyle();
+
+    // Color palette based on Bento skin
+    style.Colors[ImGuiCol_WindowBg] = ImVec4(0.12f, 0.12f, 0.12f, 1.0f);  // Dark background
+    style.Colors[ImGuiCol_TitleBg] = ImVec4(0.15f, 0.15f, 0.15f, 1.0f);
+    style.Colors[ImGuiCol_TitleBgActive] = ImVec4(0.2f, 0.2f, 0.2f, 1.0f);
+    style.Colors[ImGuiCol_FrameBg] = ImVec4(0.25f, 0.25f, 0.25f, 1.0f);  // Button backgrounds
+    style.Colors[ImGuiCol_Button] = ImVec4(0.35f, 0.35f, 0.35f, 1.0f);   // Button color
+    style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.45f, 0.45f, 0.45f, 1.0f); // Button hover color
+    style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.55f, 0.55f, 0.55f, 1.0f);  // Button active color
+    style.Colors[ImGuiCol_Border] = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);  // Border color
+
+    // Rounding and padding to mimic Bento skin
+    style.FrameRounding = 4.0f;
+    style.WindowRounding = 0.0f;
+    style.FramePadding = ImVec2(4, 4);
+    style.ItemSpacing = ImVec2(8, 4);
+}
+

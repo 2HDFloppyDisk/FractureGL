@@ -3,7 +3,10 @@
 #include "ui/MainMenu.h"
 #include "gameplay/GameStateHandler.h"
 #include "gameplay/Gameplay.h"
+#include "audio/AudioPlayer.h"
 
+static AudioPlayer audioPlayer; // Create an instance of AudioPlayer
+static bool isAudioPlayerVisible = false; // Boolean flag for audio player visibility
 extern GameState currentState;
 extern GLFWwindow* window;  // Reference to the GLFW window
 

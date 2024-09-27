@@ -2,48 +2,47 @@
 #define FMOD_MANAGER_H
 
 #include <FMOD/fmod.hpp>
+#include <string>
 
 class FMODManager {
 public:
-    static FMODManager& getInstance() {
-        static FMODManager instance;  // Guaranteed to be destroyed, instantiated on first use.
-        return instance;
-    }
+    // Singleton access
+    static FMODManager& getInstance();
 
-    FMOD::System* getSystem() {
-        return fmodSystem;
-    }
+    // Initialize and clean up FMOD system
+    void init();
+    void cleanup();
 
-    void init() {
-        if (fmodSystem == nullptr) {
-            FMOD::System_Create(&fmodSystem);
-            fmodSystem->init(512, FMOD_INIT_NORMAL, nullptr);
-        }
-    }
+    // Audio control functions
+    void Play();
+    void Pause();
+    void Stop();
+    void SetVolume(float volume);
+    bool LoadTrack(const std::string& filePath);
+    std::string GetCurrentTrackName();
 
-    void update() {
-        if (fmodSystem) {
-            fmodSystem->update();
-        }
-    }
+    // Set the current sound for playback
+    void setSound(FMOD::Sound* newSound);
 
-    void cleanup() {
-        if (fmodSystem) {
-            fmodSystem->close();
-            fmodSystem->release();
-            fmodSystem = nullptr;
-        }
-    }
+    // Accessor for the FMOD system
+    FMOD::System* getFMODSystem();
+
+    // Placeholder for playlist functionality
+    void Previous();
+    void Next();
 
 private:
-    FMOD::System* fmodSystem = nullptr;
+    // Private constructor for singleton pattern
+    FMODManager();
 
-    // Private constructor to prevent instantiation
-    FMODManager() {}
+    // Disallow copying and assignment
+    FMODManager(const FMODManager&) = delete;
+    FMODManager& operator=(const FMODManager&) = delete;
 
-    // Delete copy constructor and assignment operator to prevent copies
-    FMODManager(FMODManager const&) = delete;
-    void operator=(FMODManager const&) = delete;
+    // FMOD components
+    FMOD::System* fmodSystem;
+    FMOD::Sound* sound;
+    FMOD::Channel* channel;
 };
 
-#endif
+#endif // FMOD_MANAGER_H

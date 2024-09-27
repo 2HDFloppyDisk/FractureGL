@@ -7,8 +7,10 @@
 #include "utils/LogUtils.h"
 #include "gameplay/GameStateHandler.h"
 #include "ui/DebugUI.h"
+#include "audio/AudioPlayer.h"
 
 extern GLFWwindow* window;
+static AudioPlayer audioPlayer;
 
 // Initialize ImGui
 void InitImGui(GLFWwindow* window) {
@@ -45,7 +47,8 @@ void RenderImGui() {
     //RenderFogParticles(windowWidth, windowHeight);
 
     // Handle game state and render appropriate UI/game elements
-    HandleGameState();
+    //HandleGameState();
+    audioPlayer.ShowPlayerUI();
 
     // Finalize ImGui rendering
     ImGui::Render();

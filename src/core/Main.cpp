@@ -38,7 +38,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     // Main loop
     while (!glfwWindowShouldClose(window)) {
         // Update FMOD system
-        FMODManager::getInstance().update();
+        //FMODManager::getInstance().update();
 
         // Static variable to track the last known state of the audio
         static bool wasPlaying = false;

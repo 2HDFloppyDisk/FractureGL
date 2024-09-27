@@ -23,7 +23,7 @@ const char* FMOD_ErrorString(FMOD_RESULT result) {
 void ShowGameplay() {
     debugMessages.push_back("Starting");
 
-    FMOD::System* fmodSystem = FMODManager::getInstance().getSystem();
+    FMOD::System* fmodSystem = FMODManager::getInstance().getFMODSystem();
 
     // If sound is already playing, do not restart it
     if (IsSoundPlaying()) {

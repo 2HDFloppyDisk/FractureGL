@@ -26,6 +26,7 @@
     <ClCompile Include="Libraries\include\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Libraries\include\imgui\imgui_tables.cpp" />
     <ClCompile Include="Libraries\include\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\audio\AudioPlayer.cpp" />
     <ClCompile Include="src\audio\embedded_audio.cpp" />
     <ClCompile Include="src\audio\FMODManager.cpp" />
     <ClCompile Include="src\camera\Camera.cpp" />
@@ -60,6 +61,7 @@
     <ClInclude Include="Libraries\include\imgui\imstb_rectpack.h" />
     <ClInclude Include="Libraries\include\imgui\imstb_textedit.h" />
     <ClInclude Include="Libraries\include\imgui\imstb_truetype.h" />
+    <ClInclude Include="src\audio\AudioPlayer.h" />
     <ClInclude Include="src\audio\embedded_audio.h" />
     <ClInclude Include="src\audio\FMODManager.h" />
     <ClInclude Include="src\camera\Camera.h" />
