@@ -30,7 +30,7 @@ void ShowGameplay() {
         debugMessages.push_back("Sound is already playing.");
         return;
     }
-
+    /*
     FMOD_CREATESOUNDEXINFO exinfo = { 0 };
     exinfo.cbsize = sizeof(FMOD_CREATESOUNDEXINFO);
     exinfo.length = embeddedMP3Size;  // Size of the embedded audio array
@@ -41,14 +41,14 @@ void ShowGameplay() {
         debugMessages.push_back(FMOD_ErrorString(result));  // Custom error message
         return;  // Exit if there's an error
     }
-
+    
     // Play the sound
     result = fmodSystem->playSound(sound, 0, false, &channel);
     if (result != FMOD_OK) {
         debugMessages.push_back(FMOD_ErrorString(result));  // Custom error message
         return;
     }
-
+    */
     debugMessages.push_back("Sound is playing");
 
     // Set volume to maximum

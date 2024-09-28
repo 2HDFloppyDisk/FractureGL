@@ -8,11 +8,17 @@ public:
     AudioPlayer();
 
     void ShowPlayerUI();           // Renders the player UI
-    void LoadEmbeddedAudio();      // Loads the embedded audio track
+    void LoadEmbeddedAudio(const std::string& audioID);      // Loads the embedded audio track
     void UpdateVisualizer();       // Updates visualizer data
     void SetTrackTime(float time); // Sets track time for display
 
+    void SetCurrentAudio(const std::string& audioID);  // Method to set the current audio ID
+    void PlayCurrentAudio();  // Method to play the current audio
+    void StopAudio();  // Method to stop the current audio
+
 private:
+    std::string currentAudioID;  // Variable to store the currently selected audio ID
+
     static constexpr int numBands = 20;  // Number of bands in the spectrum
     float spectrum[numBands] = { 0.0f };  // Array to store spectrum data
 
@@ -21,9 +27,10 @@ private:
     float trackTime;
     float trackLength;
     std::string currentTrack;
-    bool isPlaying;
     std::vector<float> visualizerData;
 
     void ToggleMute();
     void UpdateSeekBar();
+
+    bool isPlaying = false;  // Tracks if audio is currently playing
 };

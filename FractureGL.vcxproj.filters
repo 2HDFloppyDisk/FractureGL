@@ -96,7 +96,7 @@
     <ClCompile Include="src\camera\CameraManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\audio\embedded_audio.cpp">
+    <ClCompile Include="src\audio\embedded_audio_1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\audio\FMODManager.cpp">
@@ -106,6 +106,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\audio\AudioPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio\embedded_audio_2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio\embedded_audio_3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio\embedded_audio_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

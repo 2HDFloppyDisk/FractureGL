@@ -27,7 +27,10 @@
     <ClCompile Include="Libraries\include\imgui\imgui_tables.cpp" />
     <ClCompile Include="Libraries\include\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\audio\AudioPlayer.cpp" />
-    <ClCompile Include="src\audio\embedded_audio.cpp" />
+    <ClCompile Include="src\audio\embedded_audio_1.cpp" />
+    <ClCompile Include="src\audio\embedded_audio_2.cpp" />
+    <ClCompile Include="src\audio\embedded_audio_3.cpp" />
+    <ClCompile Include="src\audio\embedded_audio_manager.cpp" />
     <ClCompile Include="src\audio\FMODManager.cpp" />
     <ClCompile Include="src\camera\Camera.cpp" />
     <ClCompile Include="src\camera\CameraManager.cpp" />

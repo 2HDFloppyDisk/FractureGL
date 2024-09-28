@@ -92,6 +92,10 @@ void FMODManager::GetSpectrum(float* spectrum, int numBands) {
     }
 }
 
+FMOD::Channel* FMODManager::GetChannel() {
+    return channel;  // Assuming FMODManager keeps track of the current channel
+}
+
 void FMODManager::cleanup() {
     if (sound) {
         sound->release();
@@ -167,6 +171,11 @@ void FMODManager::setSound(FMOD::Sound* newSound) {
     }
     sound = newSound;
 }
+
+FMOD::Sound* FMODManager::getSound() const {
+    return sound;
+}
+
 
 std::string FMODManager::GetCurrentTrackName() {
     if (sound) {

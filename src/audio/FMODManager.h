@@ -29,12 +29,14 @@ public:
 
     // Accessor for the FMOD system
     FMOD::System* getFMODSystem();
+    FMOD::Channel* GetChannel();  // Make public
+    FMOD::Sound* getSound() const;  // Make public
 
     // Placeholder for playlist functionality
     void Previous();
     void Next();
 
-    void GetSpectrum(float* spectrum, int numBands);  // Add this function declaration
+    void GetSpectrum(float* spectrum, int numBands);
 
 private:
     FMODManager(); // Private constructor for singleton
@@ -47,7 +49,7 @@ private:
     FMOD::Channel* channel;
     bool isMuted; // Track mute status
 
-    FMOD::DSP* fftDSP;  // Add this member variable
+    FMOD::DSP* fftDSP;
 };
 
 #endif // FMOD_MANAGER_H
