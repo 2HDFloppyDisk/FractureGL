@@ -20,6 +20,8 @@ public:
 
     bool IsPlayerUIVisible() const { return isPlayerUIVisible; }
 
+    void SetVolumeLevel(float newVolume);
+
 private:
     std::string currentAudioID;  // Variable to store the currently selected audio ID
 

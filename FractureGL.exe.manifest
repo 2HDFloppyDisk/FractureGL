@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+    <!-- Specify dependencies on application-specific DLLs -->
+    <file name="fmodL.dll" />
+    <file name="assimp.dll" />
+    
+    <!-- If using the Visual C++ runtime, include a dependency (Visual Studio usually does this automatically) -->
+    <dependency>
+        <dependentAssembly>
+            <assemblyIdentity type="win32" name="Microsoft.VC143.CRT" version="14.30.30704.0" processorArchitecture="amd64" publicKeyToken="1fc8b3b9a1e18e3b" language="*" />
+        </dependentAssembly>
+    </dependency>
+</assembly>

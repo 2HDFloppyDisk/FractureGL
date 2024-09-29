@@ -1,4 +1,6 @@
 #include "core/includes.h"
+#include <fstream>  // Added for file handling
+#include <sstream>  // Added for string parsing
 
 GameState currentState = GameState::MAIN_MENU;
 
@@ -15,6 +17,27 @@ GLFWwindow* window = nullptr;
 
 bool isDraggingWindow = false;
 double dragOffsetX, dragOffsetY;
+
+// Function to get the screen's dimensions
+void GetScreenSize(int& width, int& height) {
+    const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+    width = mode->width;
+    height = mode->height;
+}
+
+// Function to center the window
+void CenterWindow(GLFWwindow* window) {
+    int screenWidth, screenHeight;
+    GetScreenSize(screenWidth, screenHeight);
+
+    int windowWidth, windowHeight;
+    glfwGetWindowSize(window, &windowWidth, &windowHeight);
+
+    int posX = (screenWidth - windowWidth) / 2;
+    int posY = (screenHeight - windowHeight) / 2;
+
+    glfwSetWindowPos(window, posX, posY);
+}
 
 void HandleWindowMovement(GLFWwindow* window) {
     if (isDraggingWindow) {
@@ -40,11 +63,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    // Disable window decorations (borderless, no title bar)
     glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
-
-    // Enable or disable window resizing as desired
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);  // Set to GLFW_FALSE if you want to prevent resizing
 
     // Create a windowed mode window and its OpenGL context
@@ -52,6 +71,15 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     if (!window) {
         glfwTerminate();
         return -1;
+    }
+
+    // Load the last window position from config.ini or center the window if it’s the first launch
+    int lastPosX, lastPosY;
+    if (!LoadWindowPositionFromConfig(lastPosX, lastPosY)) {
+        CenterWindow(window);  // Center the window if config.ini is not found or cannot be loaded
+    }
+    else {
+        glfwSetWindowPos(window, lastPosX, lastPosY);
     }
 
     // Make the window's context current
@@ -106,7 +134,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
         // Handle window movement if dragging
         HandleWindowMovement(window);
 
-
         // Static variable to track the last known state of the audio
         static bool wasPlaying = false;
 
@@ -144,6 +171,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
         // Swap buffers
         glfwSwapBuffers(window);
     }
+
+    // Save the window's current position to config.ini before closing
+    SaveWindowPositionToConfig(window);
 
     // Cleanup
     FMODManager::getInstance().cleanup();

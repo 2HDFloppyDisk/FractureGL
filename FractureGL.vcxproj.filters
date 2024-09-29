@@ -117,6 +117,9 @@
     <ClCompile Include="src\audio\embedded_audio_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\managers\ConfigManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Libraries\include\imgui\imconfig.h">
@@ -218,5 +221,11 @@
     <ClInclude Include="src\audio\AudioPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\managers\ConfigManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="FractureGL.exe.manifest" />
   </ItemGroup>
 </Project>

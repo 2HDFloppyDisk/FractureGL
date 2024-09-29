@@ -4,6 +4,11 @@
 #include "audio/embedded_audio.h"
 #include "utils/LogUtils.h"
 #include "ui/GUIStyle.h"
+#include "managers/ConfigManager.h"
+#include <fstream>
+
+extern const char* configFilePath;
+
 
 AudioPlayer::AudioPlayer() : volume(0.5f), isMuted(false), trackTime(0.0f), trackLength(0.0f), currentTrack("No Track Loaded"), isPlaying(false) { }
 
@@ -489,4 +494,15 @@ void AudioPlayer::UpdateVisualizer() {
 
 void AudioPlayer::SetTrackTime(float time) {
     trackTime = time;
+}
+
+// Function to set the volume level
+void AudioPlayer::SetVolumeLevel(float newVolume) {
+    volume = newVolume;
+
+    // Your existing code to adjust the volume...
+    FMODManager::getInstance().SetVolume(newVolume);
+
+    // Save the state
+    SaveSettingsToConfig(isPlayerUIVisible, volume);
 }

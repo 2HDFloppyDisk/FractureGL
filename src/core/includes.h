@@ -48,6 +48,6 @@
 #include "core/CoreUI.h"        // Core UI elements (ImGui)
 #include "graphics/GLUtils.h"       // OpenGL utilities and helpers
 #include "audio/FMODManager.h"
-
+#include "managers/ConfigManager.h"
 
 #endif // INCLUDES_H
