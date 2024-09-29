@@ -55,6 +55,17 @@ void HandleWindowMovement(GLFWwindow* window) {
 }
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+    // identify the application instance
+    HANDLE hMutex = CreateMutex(NULL, TRUE, L"OGLAmp_Mutex");
+    if (hMutex == NULL || GetLastError() == ERROR_ALREADY_EXISTS) {
+        // If the mutex already exists, an instance of the application is running
+        if (hMutex) {
+            CloseHandle(hMutex);
+        }
+        return 0;  // Exit the application
+    }
+
+
 
     // Initialize GLFW and GLEW
     if (!glfwInit()) return -1;
@@ -180,6 +191,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     CleanupScene();
     CleanupImGui();
     TerminateGLFW();
+    // Release the mutex when the application exits
+    CloseHandle(hMutex);
 
     return 0;
 }
