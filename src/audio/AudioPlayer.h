@@ -16,6 +16,10 @@ public:
     void PlayCurrentAudio();  // Method to play the current audio
     void StopAudio();  // Method to stop the current audio
 
+    void RenderAudioSelectionUI();  // New method for rendering the audio selection UI
+
+    bool IsPlayerUIVisible() const { return isPlayerUIVisible; }
+
 private:
     std::string currentAudioID;  // Variable to store the currently selected audio ID
 
@@ -33,4 +37,7 @@ private:
     void UpdateSeekBar();
 
     bool isPlaying = false;  // Tracks if audio is currently playing
+
+    bool isPlayerUIVisible = false;
+
 };

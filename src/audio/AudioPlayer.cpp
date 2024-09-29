@@ -8,10 +8,16 @@
 AudioPlayer::AudioPlayer() : volume(0.5f), isMuted(false), trackTime(0.0f), trackLength(0.0f), currentTrack("No Track Loaded"), isPlaying(false) { }
 
 void AudioPlayer::ShowPlayerUI() {
+    isPlayerUIVisible = true;  // Set the UI to visible
+
+
+    ImGui::SetNextWindowSize(ImVec2(500.0f, 200.0f));
+    ImGui::SetNextWindowPos(ImVec2(0, 27)); // Example fixed position
+
     ApplyWinampStyle(); // Apply custom style
 
-    ImGui::Begin("Winamp Bento Player", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
-    ImGui::SetWindowSize(ImVec2(500, 200)); // Adjust window size
+    ImGui::Begin("Audio Player", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
+    //ImGui::SetWindowSize(ImVec2(500, 200)); // Adjust window size
 
     // First row - Track time and info
     ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(1.0f, 0.0f, 0.0f, 0.0f)); // Red background for debugging
@@ -250,15 +256,29 @@ void AudioPlayer::ShowPlayerUI() {
     ImVec2 mainWindowPos = ImGui::GetWindowPos();
     ImVec2 mainWindowSize = ImGui::GetWindowSize();
 
+
+
     ImGui::End();
 
+    isPlayerUIVisible = false;  // Reset visibility if window is closed
+
     // Set the position for the "Audio Selection" window to appear at the bottom of the main window
-    ImGui::SetNextWindowPos(ImVec2(mainWindowPos.x, mainWindowPos.y + mainWindowSize.y), ImGuiCond_Always);
-    ImGui::SetNextWindowSize(ImVec2(500, 150), ImGuiCond_Appearing);  // Set initial size
+    //ImGui::SetNextWindowPos(ImVec2(mainWindowPos.x, mainWindowPos.y + mainWindowSize.y), ImGuiCond_Always);
+    //ImGui::SetNextWindowSize(ImVec2(500, 150), ImGuiCond_Appearing);  // Set initial size
 
+}
+/*
+void AudioPlayer::RenderAudioSelectionUI() {
+    // Get the size of the main window to use for other windows
+    ImVec2 mainWindowSize = ImGui::GetWindowSize();
 
-    // New window for audio selection
-    ImGui::Begin("Audio Selection", nullptr, ImGuiWindowFlags_NoCollapse);
+    // Set the size and position of the audio selection UI to match the main window
+    ImGui::SetNextWindowSize(mainWindowSize, ImGuiCond_Always);
+    ImGui::SetNextWindowPos(ImVec2(0, 227)); // Example fixed position
+
+    ImGui::SetWindowSize(ImVec2(500, 200)); // Adjust window size
+    ImGui::SetWindowPos(ImVec2(0, 350));
+    ImGui::Begin("Audio Selection", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
 
     // Track Selection
     const char* audioList[] = { "Diatribe by Oliver Michael - Parhelion", "Once and for All by The Robbery Continues", "El Rio Fluye by El Rio Fluye" };
@@ -268,6 +288,61 @@ void AudioPlayer::ShowPlayerUI() {
 
     // Set the current audio based on the selection
     SetCurrentAudio(audioList[currentAudioIndex]);
+
+
+    ImGui::End();  // End the audio selection window
+}
+*/
+
+void AudioPlayer::RenderAudioSelectionUI() {
+    // Get the size of the main window to use for other windows
+    ImVec2 mainWindowSize = ImGui::GetWindowSize();
+    
+    // Set the size and position of the audio selection UI to match the main window
+    ImGui::SetNextWindowSize(mainWindowSize, ImGuiCond_Always);
+    ImGui::SetNextWindowPos(ImVec2(0, 227)); // Example fixed position
+
+    ImGui::SetWindowSize(ImVec2(500, 200)); // Adjust window size
+    ImGui::SetWindowPos(ImVec2(0, 350));
+    ImGui::Begin("Audio Selection", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
+
+    static int currentAudioIndex = 0;
+    //ImGui::Begin("Audio Selection", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+
+    // Set up table with 2 columns: "Title" and "Time"
+    if (ImGui::BeginTable("AudioListTable", 2, ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders | ImGuiTableFlags_Resizable)) {
+        // Set up headers
+        ImGui::TableSetupColumn("Title", ImGuiTableColumnFlags_WidthStretch);
+        ImGui::TableSetupColumn("Time", ImGuiTableColumnFlags_WidthFixed, 50.0f);  // Fixed width for the time column
+        ImGui::TableHeadersRow();
+
+        // Sample data: Replace with your actual audio list data
+        const char* audioList[] = { "Diatribe by Oliver Michael - Parhelion", "Once and for All by The Robbery Continues", "El Rio Fluye by El Rio Fluye" };
+
+        const char* audioTimes[] = {
+            "3:50", "4:14", "3:58"
+        };
+
+
+        // Iterate through audio list and populate table rows
+        for (int i = 0; i < IM_ARRAYSIZE(audioList); i++) {
+            ImGui::TableNextRow();
+
+            // Title column
+            ImGui::TableSetColumnIndex(0);
+            if (ImGui::Selectable(audioList[i], i == currentAudioIndex)) {
+                // Handle selection
+                currentAudioIndex = i;
+                SetCurrentAudio(audioList[currentAudioIndex]);
+            }
+
+            // Time column
+            ImGui::TableSetColumnIndex(1);
+            ImGui::Text("%s", audioTimes[i]);
+        }
+
+        ImGui::EndTable();
+    }
 
     ImGui::End();  // End the audio selection window
 }
@@ -415,4 +490,3 @@ void AudioPlayer::UpdateVisualizer() {
 void AudioPlayer::SetTrackTime(float time) {
     trackTime = time;
 }
-

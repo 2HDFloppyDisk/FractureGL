@@ -13,15 +13,53 @@ void RenderDebugUI();
 // Global reference to the GLFW window
 GLFWwindow* window = nullptr;
 
+bool isDraggingWindow = false;
+double dragOffsetX, dragOffsetY;
+
+void HandleWindowMovement(GLFWwindow* window) {
+    if (isDraggingWindow) {
+        // Get the current mouse position
+        double currentMouseX, currentMouseY;
+        glfwGetCursorPos(window, &currentMouseX, &currentMouseY);
+
+        // Calculate the new window position using the initial offset
+        int newWindowX = static_cast<int>(currentMouseX - dragOffsetX);
+        int newWindowY = static_cast<int>(currentMouseY - dragOffsetY);
+
+        // Set the new window position
+        glfwSetWindowPos(window, newWindowX, newWindowY);
+    }
+}
+
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 
     // Initialize GLFW and GLEW
-    window = InitGLFW("OGLAmp", 1280, 720);
-    if (!window) return -1;
+    if (!glfwInit()) return -1;
+
+    // Set window hints before creating the window
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    // Disable window decorations (borderless, no title bar)
+    glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+
+    // Enable or disable window resizing as desired
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);  // Set to GLFW_FALSE if you want to prevent resizing
+
+    // Create a windowed mode window and its OpenGL context
+    window = glfwCreateWindow(500, 600, "OGLAmp", nullptr, nullptr);
+    if (!window) {
+        glfwTerminate();
+        return -1;
+    }
+
+    // Make the window's context current
+    glfwMakeContextCurrent(window);
 
     if (!InitGLEW()) return -1;
 
-    ShowSplashScreen();
+    //ShowSplashScreen();
 
     // Setup ImGui context
     InitImGui(window);
@@ -35,10 +73,39 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
     FMODManager::getInstance().init();
 
+    // Initial window size calculation
+    UpdateMainWindowSize(window);
+
     // Main loop
     while (!glfwWindowShouldClose(window)) {
-        // Update FMOD system
-        //FMODManager::getInstance().update();
+        // Get the current mouse state
+        int mouseButtonState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+        double mouseX, mouseY;
+        glfwGetCursorPos(window, &mouseX, &mouseY);
+
+        // Check if the user clicked on the menu bar region (adjust y-value based on menu bar height)
+        if (mouseButtonState == GLFW_PRESS && mouseY >= 0 && mouseY <= 30) { // Assuming the menu bar height is 30 pixels
+            if (!isDraggingWindow) {
+                // Begin dragging
+                isDraggingWindow = true;
+
+                // Get the current window position
+                int windowX, windowY;
+                glfwGetWindowPos(window, &windowX, &windowY);
+
+                // Calculate the offset between the mouse position and the window's top-left corner
+                dragOffsetX = mouseX - windowX;
+                dragOffsetY = mouseY - windowY;
+            }
+        }
+        else if (mouseButtonState == GLFW_RELEASE) {
+            // Stop dragging
+            isDraggingWindow = false;
+        }
+
+        // Handle window movement if dragging
+        HandleWindowMovement(window);
+
 
         // Static variable to track the last known state of the audio
         static bool wasPlaying = false;
