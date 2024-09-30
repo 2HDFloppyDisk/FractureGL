@@ -22,6 +22,8 @@ bool showAddAudioLibraryUI = false;
 bool showDelAudioLibraryUI = false;
 bool showSkinsUI = false;
 bool showPreferencesUI = false;
+bool showFeedbackUI = false;
+bool showAboutUI = false;
 
 // Initialize ImGui
 void InitImGui(GLFWwindow* window) {
@@ -92,8 +94,8 @@ void DrawMenuBar() {
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Help")) {
-            ImGui::MenuItem("Send Feedback", nullptr, &showAudioSelectionUI);
-            ImGui::MenuItem("About", nullptr, &showDebugConsoleUI);
+            ImGui::MenuItem("Send Feedback", nullptr, &showFeedbackUI);
+            ImGui::MenuItem("About", nullptr, &showAboutUI);
             ImGui::EndMenu();
         }
         // Position the "X" button to the right side of the menu bar with padding
@@ -180,6 +182,13 @@ void RenderImGui() {
         //
     }
 
+    if (showFeedbackUI) {
+        //
+    }
+
+    if (showAboutUI) {
+        //
+    }
 
     UpdateMainWindowSize(window);
 

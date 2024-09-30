@@ -402,3 +402,4 @@ _backups/
 zip_src_files.bat
 copy_src_files.bat
 config.ini
+*.ini

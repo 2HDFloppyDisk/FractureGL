@@ -154,7 +154,7 @@ void FMODManager::SetVolume(float volume) {
 
 bool FMODManager::LoadTrack(const std::string& filePath) {
     if (fmodSystem) {
-        FMOD_RESULT result = fmodSystem->createSound(filePath.c_str(), FMOD_DEFAULT, nullptr, &sound);
+        FMOD_RESULT result = fmodSystem->createSound(filePath.c_str(), FMOD_DEFAULT | FMOD_ACCURATETIME, nullptr, &sound);
         if (result != FMOD_OK) {
             LogToUI("Failed to load track: " + filePath);
             return false;

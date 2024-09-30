@@ -6,11 +6,27 @@
 #include "ui/GUIStyle.h"
 #include "managers/ConfigManager.h"
 #include <fstream>
+#include <windows.h>
+#include <commdlg.h>
+#include <filesystem>
 
 extern const char* configFilePath;
 
 
-AudioPlayer::AudioPlayer() : volume(0.5f), isMuted(false), trackTime(0.0f), trackLength(0.0f), currentTrack("No Track Loaded"), isPlaying(false) { }
+AudioPlayer::AudioPlayer() : volume(0.5f), isMuted(false), trackTime(0.0f), trackLength(0.0f), currentTrack("No Track Loaded"), isPlaying(false) {
+    // Initialize embedded audio data
+    static const std::vector<std::pair<std::string, std::string>> embeddedAudioList = {
+        {"Diatribe by Oliver Michael - Parhelion", "2:29"},
+        {"Once and for All by The Robbery Continues", "3:43"},
+        {"El Rio Fluye by El Rio Fluye", "3:29"}
+    };
+
+    for (const auto& audio : embeddedAudioList) {
+        audioLibrary.push_back(audio.first);        // Add to the audio library
+        externalAudioTitles.push_back(audio.first); // Use the embedded audio title as-is
+        externalAudioLengths.push_back(audio.second); // Set the manually specified length
+    }
+}
 
 void AudioPlayer::ShowPlayerUI() {
     isPlayerUIVisible = true;  // Set the UI to visible
@@ -300,57 +316,71 @@ void AudioPlayer::RenderAudioSelectionUI() {
 */
 
 void AudioPlayer::RenderAudioSelectionUI() {
-    // Get the size of the main window to use for other windows
-    ImVec2 mainWindowSize = ImGui::GetWindowSize();
-    
-    // Set the size and position of the audio selection UI to match the main window
-    ImGui::SetNextWindowSize(mainWindowSize, ImGuiCond_Always);
-    ImGui::SetNextWindowPos(ImVec2(0, 227)); // Example fixed position
+    static const std::vector<std::string> embeddedAudioList = {
+        "Diatribe by Oliver Michael - Parhelion",
+        "Once and for All by The Robbery Continues",
+        "El Rio Fluye by El Rio Fluye"
+    };
 
-    ImGui::SetWindowSize(ImVec2(500, 200)); // Adjust window size
+    ImVec2 mainWindowSize = ImGui::GetWindowSize();
+
+    ImGui::SetNextWindowSize(mainWindowSize, ImGuiCond_Always);
+    ImGui::SetNextWindowPos(ImVec2(0, 227));
+
+    ImGui::SetWindowSize(ImVec2(500, 200));
     ImGui::SetWindowPos(ImVec2(0, 350));
     ImGui::Begin("Audio Selection", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
 
-    static int currentAudioIndex = 0;
-    //ImGui::Begin("Audio Selection", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
-
     // Set up table with 2 columns: "Title" and "Time"
     if (ImGui::BeginTable("AudioListTable", 2, ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders | ImGuiTableFlags_Resizable)) {
-        // Set up headers
         ImGui::TableSetupColumn("Title", ImGuiTableColumnFlags_WidthStretch);
-        ImGui::TableSetupColumn("Time", ImGuiTableColumnFlags_WidthFixed, 50.0f);  // Fixed width for the time column
+        ImGui::TableSetupColumn("Time", ImGuiTableColumnFlags_WidthFixed, 50.0f);
         ImGui::TableHeadersRow();
 
-        // Sample data: Replace with your actual audio list data
-        const char* audioList[] = { "Diatribe by Oliver Michael - Parhelion", "Once and for All by The Robbery Continues", "El Rio Fluye by El Rio Fluye" };
-
-        const char* audioTimes[] = {
-            "3:50", "4:14", "3:58"
-        };
-
-
-        // Iterate through audio list and populate table rows
-        for (int i = 0; i < IM_ARRAYSIZE(audioList); i++) {
+        // Iterate through the audio library and populate table rows
+        for (size_t i = 0; i < audioLibrary.size(); ++i) {
             ImGui::TableNextRow();
 
             // Title column
             ImGui::TableSetColumnIndex(0);
-            if (ImGui::Selectable(audioList[i], i == currentAudioIndex)) {
+            if (ImGui::Selectable(externalAudioTitles[i].c_str(), currentAudioIndex == i)) {
                 // Handle selection
                 currentAudioIndex = i;
-                SetCurrentAudio(audioList[currentAudioIndex]);
+                SetCurrentAudio(audioLibrary[i]);
+
+                // Determine if the selected audio is external or embedded
+                isPlayingExternal = (i >= embeddedAudioList.size());
             }
 
             // Time column
             ImGui::TableSetColumnIndex(1);
-            ImGui::Text("%s", audioTimes[i]);
+            ImGui::Text("%s", externalAudioLengths[i].c_str());
         }
 
         ImGui::EndTable();
     }
 
+    // Button to add external audio
+    if (ImGui::Button("+")) {
+        std::string filePath = OpenFileDialog();
+        if (!filePath.empty()) {
+            AddExternalAudio(filePath);
+        }
+    }
+    ImGui::SameLine();
+    // Button to remove selected audio (only if it's an external file)
+    if (ImGui::Button("-")) {
+        // Check if the currently selected audio is an external file
+        if (isPlayingExternal && currentAudioIndex >= embeddedAudioList.size()) {
+            RemoveExternalAudio(currentAudioIndex);
+        }
+    }
+
     ImGui::End();  // End the audio selection window
 }
+
+
+
 
 
 
@@ -368,8 +398,27 @@ void AudioPlayer::LoadEmbeddedAudio(const std::string& audioID) {
             FMOD_RESULT result = fmodSystem->createSound(reinterpret_cast<const char*>(audioFiles[audioID]), FMOD_OPENMEMORY, &exInfo, &sound);  // Use the audio data from the map
 
             if (result == FMOD_OK) {
+                // Set the sound in FMODManager
                 FMODManager::getInstance().setSound(sound);
                 currentTrack = audioID;  // Set current track to the selected audio ID
+
+                // Get the length of the embedded audio track
+                unsigned int length = 0;
+                sound->getLength(&length, FMOD_TIMEUNIT_MS); // Get length in milliseconds
+
+                // Convert length to mm:ss format
+                unsigned int minutes = (length / 1000) / 60;
+                unsigned int seconds = (length / 1000) % 60;
+                char lengthString[6];
+                sprintf_s(lengthString, sizeof(lengthString), "%d:%02d", minutes, seconds);
+
+                // Update the length in the externalAudioLengths vector
+                auto it = std::find(audioLibrary.begin(), audioLibrary.end(), audioID);
+                if (it != audioLibrary.end()) {
+                    size_t index = std::distance(audioLibrary.begin(), it);
+                    externalAudioLengths[index] = lengthString;
+                }
+
                 LogToUI(audioID + " loaded successfully.");
             }
             else {
@@ -385,6 +434,7 @@ void AudioPlayer::LoadEmbeddedAudio(const std::string& audioID) {
     }
 }
 
+
 void AudioPlayer::SetCurrentAudio(const std::string& audioID) {
     currentAudioID = audioID;
 }
@@ -395,9 +445,24 @@ void AudioPlayer::PlayCurrentAudio() {
         StopAudio();
     }
 
-    // Load and play the new selected audio
+    // Load and play the selected audio
     if (!currentAudioID.empty()) {
-        LoadEmbeddedAudio(currentAudioID);
+        if (isPlayingExternal) {
+            // Use the existing LoadTrack method to load external audio
+            if (!FMODManager::getInstance().LoadTrack(currentAudioID)) {
+                LogToUI("Failed to load external audio: " + currentAudioID);
+                return;
+            }
+
+            // Extract the file name from the path
+            currentTrack = std::filesystem::path(currentAudioID).stem().string();
+        }
+        else {
+            // Load embedded audio
+            LoadEmbeddedAudio(currentAudioID);
+            currentTrack = currentAudioID;  // Assuming embedded audio ID is a suitable track name
+        }
+
         FMODManager::getInstance().Play();
         isPlaying = true;  // Update the state to indicate audio is playing
         LogToUI(currentAudioID + " is now playing.");
@@ -408,11 +473,28 @@ void AudioPlayer::PlayCurrentAudio() {
 }
 
 
+
+
 void AudioPlayer::StopAudio() {
-    FMODManager::getInstance().Stop();  // Stops the audio using the FMOD manager
-    isPlaying = false;  // Reset the state to indicate no audio is playing
-    LogToUI("Audio stopped.");
+    // Stop the audio using the FMOD manager
+    FMODManager::getInstance().Stop();
+
+    // Reset the playback state
+    isPlaying = false;
+    trackTime = 0.0f;  // Reset track time
+    currentTrack = "No Track Loaded";
+
+    // Clear the spectrum data to reset the visualizer
+    for (int i = 0; i < numBands; ++i) {
+        spectrum[i] = 0.0f;
+    }
+
+    // Log the action to the UI
+    LogToUI("Audio stopped and visualizer reset.");
 }
+
+
+
 
 
 void AudioPlayer::ToggleMute() {
@@ -456,9 +538,11 @@ void AudioPlayer::UpdateSeekBar() {
     float handleHeight = 20.0f; // Height of the handle
     float offsetY = (handleHeight - barSize.y) * 0.5f; // Offset to center the fill
 
-    ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(barPos.x, barPos.y + offsetY),
+    ImGui::GetWindowDrawList()->AddRectFilled(
+        ImVec2(barPos.x, barPos.y + offsetY),
         ImVec2(barPos.x + (barSize.x * adjustedSeekBarValue), barPos.y + offsetY + barSize.y),
-        IM_COL32(100, 200, 250, 255)); // Fully opaque fill
+        IM_COL32(100, 200, 250, 255) // Fully opaque fill
+    );
 
     // Set cursor for the slider handle and draw it
     ImGui::SetCursorScreenPos(barPos); // Reset cursor to the start of the bar
@@ -488,9 +572,7 @@ void AudioPlayer::UpdateSeekBar() {
     style.Colors[ImGuiCol_FrameBg] = originalSliderColor;
 }
 
-void AudioPlayer::UpdateVisualizer() {
-    // Placeholder for visualizer update logic
-}
+
 
 void AudioPlayer::SetTrackTime(float time) {
     trackTime = time;
@@ -505,4 +587,98 @@ void AudioPlayer::SetVolumeLevel(float newVolume) {
 
     // Save the state
     SaveSettingsToConfig(isPlayerUIVisible, volume);
+}
+
+void AudioPlayer::AddExternalAudio(const std::string& filePath) {
+    // Add the file path to the audio library
+    audioLibrary.push_back(filePath);
+
+    // Extract file name for display (without extension)
+    std::string fileName = GetFileName(filePath);
+    externalAudioTitles.push_back(fileName);  // Store the formatted title
+
+    // Load the audio file to get its length
+    FMOD::Sound* sound = nullptr;
+    FMOD_RESULT result = FMODManager::getInstance().getFMODSystem()->createSound(filePath.c_str(), FMOD_DEFAULT | FMOD_ACCURATETIME, nullptr, &sound);
+    if (result == FMOD_OK) {
+        unsigned int length = 0;
+        sound->getLength(&length, FMOD_TIMEUNIT_MS); // Get length in milliseconds
+
+        // Convert length to mm:ss format
+        unsigned int minutes = (length / 1000) / 60;
+        unsigned int seconds = (length / 1000) % 60;
+        char lengthString[6];
+        sprintf_s(lengthString, sizeof(lengthString), "%d:%02d", minutes, seconds);
+        externalAudioLengths.push_back(lengthString);
+
+        // Release the sound to free memory
+        sound->release();
+    }
+    else {
+        externalAudioLengths.push_back("--:--"); // Use placeholder if loading failed
+    }
+}
+
+void AudioPlayer::RemoveExternalAudio(size_t index) {
+    // Calculate the index relative to external files
+    size_t externalIndex = index - embeddedAudioList.size();
+
+    // Check if the currently playing audio is the one being removed
+    if (isPlayingExternal && currentAudioIndex == index) {
+        // Stop playback
+        StopAudio();
+
+        // Clear current track info
+        currentTrack = "No Track Loaded";
+        currentAudioID.clear();
+        isPlaying = false;
+        isPlayingExternal = false; // Reset external audio flag
+    }
+
+    // Remove from the vectors storing external audio information
+    audioLibrary.erase(audioLibrary.begin() + externalIndex);
+    externalAudioTitles.erase(externalAudioTitles.begin() + externalIndex);
+    externalAudioLengths.erase(externalAudioLengths.begin() + externalIndex);
+
+    // Reset current audio index to prevent invalid selection
+    currentAudioIndex = -1;
+}
+
+
+
+
+std::string AudioPlayer::OpenFileDialog() {
+    // Initialize an OPENFILENAME structure
+    OPENFILENAMEW ofn;
+    wchar_t fileName[MAX_PATH] = L"";
+    ZeroMemory(&ofn, sizeof(ofn));
+    ofn.lStructSize = sizeof(ofn);
+    ofn.hwndOwner = nullptr;  // Owner window (can be set to a handle if needed)
+    ofn.lpstrFile = fileName;  // Buffer to store the file name
+    ofn.nMaxFile = MAX_PATH;  // Maximum file path length
+    ofn.lpstrFilter = L"Audio Files\0*.MP3;*.WAV\0All Files\0*.*\0";  // File type filters
+    ofn.nFilterIndex = 1;  // Index of the filter to use initially
+    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;  // Flags for dialog behavior
+
+    // Show the file dialog
+    if (GetOpenFileNameW(&ofn)) {  // Use GetOpenFileNameW for Unicode
+        // Convert wide string to standard string
+        std::wstring ws(fileName);
+        return std::string(ws.begin(), ws.end());
+    }
+
+    // Return an empty string if the dialog was canceled or failed
+    return "";
+}
+
+std::string AudioPlayer::GetFileName(const std::string& filePath) {
+    size_t lastSlash = filePath.find_last_of("/\\");
+    std::string fileName = (lastSlash == std::string::npos) ? filePath : filePath.substr(lastSlash + 1);
+
+    size_t lastDot = fileName.find_last_of('.');
+    if (lastDot != std::string::npos) {
+        fileName = fileName.substr(0, lastDot);
+    }
+
+    return fileName;
 }

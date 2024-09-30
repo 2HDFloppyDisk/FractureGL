@@ -24,5 +24,7 @@ extern bool showAddAudioLibraryUI;
 extern bool showDelAudioLibraryUI;
 extern bool showSkinsUI;
 extern bool showPreferencesUI;
+extern bool showFeedbackUI;
+extern bool showAboutUI;
 
 #endif // CORE_UI_H
