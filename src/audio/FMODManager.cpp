@@ -165,6 +165,17 @@ bool FMODManager::LoadTrack(const std::string& filePath) {
     return false;
 }
 
+void FMODManager::SetAudioLibrary(const std::vector<std::string>& library) {
+    audioLibrary = library;
+    currentTrackIndex = 0;  // Reset to the first track
+}
+
+void FMODManager::SetCurrentTrackIndex(size_t index) {
+    if (index < audioLibrary.size()) {
+        currentTrackIndex = index;
+    }
+}
+
 void FMODManager::setSound(FMOD::Sound* newSound) {
     if (sound) {
         sound->release();
@@ -184,10 +195,36 @@ std::string FMODManager::GetCurrentTrackName() {
     return "No track loaded.";
 }
 
-void FMODManager::Previous() {
-    LogToUI("Previous track.");
+void FMODManager::Next(AudioPlayer& audioPlayer) {
+    LogToUI("Current track index (before Next): " + std::to_string(audioPlayer.currentAudioIndex));
+
+    // Increment the index and wrap around if it exceeds the library size
+    audioPlayer.currentAudioIndex = (audioPlayer.currentAudioIndex + 1) % audioPlayer.audioLibrary.size();
+
+    LogToUI("Current track index (after Next): " + std::to_string(audioPlayer.currentAudioIndex));
+
+    // Determine if the current audio is external or embedded
+    audioPlayer.isPlayingExternal = (audioPlayer.currentAudioIndex >= audioPlayer.embeddedAudioList.size());
+
+    // Set the new current audio and play it
+    audioPlayer.SetCurrentAudio(audioPlayer.audioLibrary[audioPlayer.currentAudioIndex]);
+    audioPlayer.PlayCurrentAudio();
 }
 
-void FMODManager::Next() {
-    LogToUI("Next track.");
+void FMODManager::Previous(AudioPlayer& audioPlayer) {
+    LogToUI("Current track index (before Previous): " + std::to_string(audioPlayer.currentAudioIndex));
+
+    // Decrement the index and wrap around if it goes below 0
+    if (--audioPlayer.currentAudioIndex < 0) {
+        audioPlayer.currentAudioIndex = audioPlayer.audioLibrary.size() - 1;
+    }
+
+    LogToUI("Current track index (after Previous): " + std::to_string(audioPlayer.currentAudioIndex));
+
+    // Determine if the current audio is external or embedded
+    audioPlayer.isPlayingExternal = (audioPlayer.currentAudioIndex >= audioPlayer.embeddedAudioList.size());
+
+    // Set the new current audio and play it
+    audioPlayer.SetCurrentAudio(audioPlayer.audioLibrary[audioPlayer.currentAudioIndex]);
+    audioPlayer.PlayCurrentAudio();
 }

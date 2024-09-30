@@ -15,7 +15,7 @@ extern const char* configFilePath;
 
 AudioPlayer::AudioPlayer() : volume(0.5f), isMuted(false), trackTime(0.0f), trackLength(0.0f), currentTrack("No Track Loaded"), isPlaying(false) {
     // Initialize embedded audio data
-    static const std::vector<std::pair<std::string, std::string>> embeddedAudioList = {
+    embeddedAudioList = {
         {"Diatribe by Oliver Michael - Parhelion", "2:29"},
         {"Once and for All by The Robbery Continues", "3:43"},
         {"El Rio Fluye by El Rio Fluye", "3:29"}
@@ -26,6 +26,7 @@ AudioPlayer::AudioPlayer() : volume(0.5f), isMuted(false), trackTime(0.0f), trac
         externalAudioTitles.push_back(audio.first); // Use the embedded audio title as-is
         externalAudioLengths.push_back(audio.second); // Set the manually specified length
     }
+
 }
 
 void AudioPlayer::ShowPlayerUI() {
@@ -244,7 +245,7 @@ void AudioPlayer::ShowPlayerUI() {
     ImGui::BeginChild("FourthRow", ImVec2(0, 40), true);
 
     if (ImGui::Button("Prev")) {
-        FMODManager::getInstance().Previous();
+        FMODManager::getInstance().Previous(*this);
     }
     ImGui::SameLine();
     if (ImGui::Button("Play")) {
@@ -263,12 +264,18 @@ void AudioPlayer::ShowPlayerUI() {
     }
     ImGui::SameLine();
     if (ImGui::Button("Next")) {
-        FMODManager::getInstance().Next();
+        FMODManager::getInstance().Next(*this);
     }
 
-    ImGui::SameLine(0, 100);
+    ImGui::SameLine(0, 70);
     if (ImGui::Button("Repeat")) {
-        // Add repeat functionality
+        ToggleRepeat();  // Call the toggle repeat function
+    }
+
+    ImGui::SameLine();
+    if (ImGui::Button("Repeat All")) {
+        repeatAll = !repeatAll;  // Toggle repeat all mode
+        LogToUI(repeatAll ? "Repeat all mode enabled." : "Repeat all mode disabled.");
     }
     ImGui::EndChild();
     ImGui::PopStyleColor();
@@ -277,43 +284,21 @@ void AudioPlayer::ShowPlayerUI() {
     ImVec2 mainWindowPos = ImGui::GetWindowPos();
     ImVec2 mainWindowSize = ImGui::GetWindowSize();
 
+    //RenderAudioSelectionUI();
+
+    std::vector<std::string> audioTitles;
+    for (const auto& audio : embeddedAudioList) {
+        audioTitles.push_back(audio.first); // Extract the title part of the pair
+    }
+
+    FMODManager::getInstance().SetAudioLibrary(audioTitles);
 
 
     ImGui::End();
 
     isPlayerUIVisible = false;  // Reset visibility if window is closed
 
-    // Set the position for the "Audio Selection" window to appear at the bottom of the main window
-    //ImGui::SetNextWindowPos(ImVec2(mainWindowPos.x, mainWindowPos.y + mainWindowSize.y), ImGuiCond_Always);
-    //ImGui::SetNextWindowSize(ImVec2(500, 150), ImGuiCond_Appearing);  // Set initial size
-
 }
-/*
-void AudioPlayer::RenderAudioSelectionUI() {
-    // Get the size of the main window to use for other windows
-    ImVec2 mainWindowSize = ImGui::GetWindowSize();
-
-    // Set the size and position of the audio selection UI to match the main window
-    ImGui::SetNextWindowSize(mainWindowSize, ImGuiCond_Always);
-    ImGui::SetNextWindowPos(ImVec2(0, 227)); // Example fixed position
-
-    ImGui::SetWindowSize(ImVec2(500, 200)); // Adjust window size
-    ImGui::SetWindowPos(ImVec2(0, 350));
-    ImGui::Begin("Audio Selection", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
-
-    // Track Selection
-    const char* audioList[] = { "Diatribe by Oliver Michael - Parhelion", "Once and for All by The Robbery Continues", "El Rio Fluye by El Rio Fluye" };
-    static int currentAudioIndex = 0;
-
-    ImGui::Combo("Select Audio", &currentAudioIndex, audioList, IM_ARRAYSIZE(audioList));
-
-    // Set the current audio based on the selection
-    SetCurrentAudio(audioList[currentAudioIndex]);
-
-
-    ImGui::End();  // End the audio selection window
-}
-*/
 
 void AudioPlayer::RenderAudioSelectionUI() {
     static const std::vector<std::string> embeddedAudioList = {
@@ -343,13 +328,19 @@ void AudioPlayer::RenderAudioSelectionUI() {
 
             // Title column
             ImGui::TableSetColumnIndex(0);
-            if (ImGui::Selectable(externalAudioTitles[i].c_str(), currentAudioIndex == i)) {
-                // Handle selection
+
+            // Check for selection and double-click
+            if (ImGui::Selectable(externalAudioTitles[i].c_str(), currentAudioIndex == i, ImGuiSelectableFlags_AllowDoubleClick)) {
+                // Handle single click: select the track without stopping the current audio
                 currentAudioIndex = i;
                 SetCurrentAudio(audioLibrary[i]);
-
-                // Determine if the selected audio is external or embedded
                 isPlayingExternal = (i >= embeddedAudioList.size());
+
+                // Check if it was a double-click
+                if (ImGui::IsMouseDoubleClicked(0)) {
+                    // Play the selected track only if double-clicked
+                    PlayCurrentAudio();
+                }
             }
 
             // Time column
@@ -378,12 +369,6 @@ void AudioPlayer::RenderAudioSelectionUI() {
 
     ImGui::End();  // End the audio selection window
 }
-
-
-
-
-
-
 
 void AudioPlayer::LoadEmbeddedAudio(const std::string& audioID) {
     FMOD::System* fmodSystem = FMODManager::getInstance().getFMODSystem();
@@ -434,10 +419,15 @@ void AudioPlayer::LoadEmbeddedAudio(const std::string& audioID) {
     }
 }
 
-
 void AudioPlayer::SetCurrentAudio(const std::string& audioID) {
     currentAudioID = audioID;
+    currentTrack = audioID;  // Update the displayed track name
+    FMODManager::getInstance().SetCurrentTrackIndex(currentAudioIndex);
+
+    // Stop any current audio to allow the new track to play correctly
+    StopAudio();
 }
+
 
 void AudioPlayer::PlayCurrentAudio() {
     // Stop the current audio if it is playing
@@ -465,6 +455,16 @@ void AudioPlayer::PlayCurrentAudio() {
 
         FMODManager::getInstance().Play();
         isPlaying = true;  // Update the state to indicate audio is playing
+
+        // Set repeat mode on the FMOD channel
+        FMOD::Channel* channel = FMODManager::getInstance().GetChannel();
+        if (channel && repeat) {
+            channel->setMode(FMOD_LOOP_NORMAL);  // Enable looping
+        }
+        else if (channel) {
+            channel->setMode(FMOD_LOOP_OFF);  // Disable looping
+        }
+
         LogToUI(currentAudioID + " is now playing.");
     }
     else {
@@ -473,6 +473,10 @@ void AudioPlayer::PlayCurrentAudio() {
 }
 
 
+void AudioPlayer::ToggleRepeat() {
+    repeat = !repeat;  // Toggle the repeat flag
+    LogToUI(repeat ? "Repeat mode enabled." : "Repeat mode disabled.");
+}
 
 
 void AudioPlayer::StopAudio() {
@@ -492,10 +496,6 @@ void AudioPlayer::StopAudio() {
     // Log the action to the UI
     LogToUI("Audio stopped and visualizer reset.");
 }
-
-
-
-
 
 void AudioPlayer::ToggleMute() {
     isMuted = !isMuted;
@@ -520,6 +520,31 @@ void AudioPlayer::UpdateSeekBar() {
 
     // Get the total length of the current audio track
     sound->getLength(&trackLength, FMOD_TIMEUNIT_MS);
+
+    // Check if the track has finished playing
+    if (currentPosition >= trackLength) {
+        if (repeat) {
+            // Restart the track if repeat is enabled
+            channel->setPosition(0, FMOD_TIMEUNIT_MS);
+        }
+        else if (repeatAll) {
+            // Move to the next track if "Repeat All" is enabled
+            currentAudioIndex++;
+            if (currentAudioIndex >= audioLibrary.size()) {
+                currentAudioIndex = 0; // Loop back to the first track
+            }
+
+            // Set the new track in FMODManager and AudioPlayer
+            FMODManager::getInstance().SetCurrentTrackIndex(currentAudioIndex);
+            SetCurrentAudio(audioLibrary[currentAudioIndex]);
+            PlayCurrentAudio();
+        }
+        else {
+            StopAudio(); // Stop the track if neither repeat mode is enabled
+            return;
+        }
+
+    }
 
     // Update the track time in seconds
     trackTime = static_cast<float>(currentPosition) / 1000.0f;
@@ -571,7 +596,6 @@ void AudioPlayer::UpdateSeekBar() {
     style.FrameRounding = originalFrameRounding;
     style.Colors[ImGuiCol_FrameBg] = originalSliderColor;
 }
-
 
 
 void AudioPlayer::SetTrackTime(float time) {
@@ -643,9 +667,6 @@ void AudioPlayer::RemoveExternalAudio(size_t index) {
     // Reset current audio index to prevent invalid selection
     currentAudioIndex = -1;
 }
-
-
-
 
 std::string AudioPlayer::OpenFileDialog() {
     // Initialize an OPENFILENAME structure

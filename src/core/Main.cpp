@@ -3,6 +3,7 @@
 #include <sstream>  // Added for string parsing
 
 GameState currentState = GameState::MAIN_MENU;
+CoreUI coreUI;
 
 // Global variables for tracking camera and mouse position
 CameraManager cameraManager;  // No need for a pointer anymore
@@ -101,7 +102,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     //ShowSplashScreen();
 
     // Setup ImGui context
-    InitImGui(window);
+    coreUI.InitImGui(window);
 
     // Get window dimensions
     int windowWidth, windowHeight;
@@ -113,7 +114,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     FMODManager::getInstance().init();
 
     // Initial window size calculation
-    UpdateMainWindowSize(window);
+    coreUI.UpdateMainWindowSize(window);
 
     // Main loop
     while (!glfwWindowShouldClose(window)) {
@@ -177,7 +178,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
         // Poll events and render ImGui
         glfwPollEvents();
 
-        RenderImGui();
+        coreUI.RenderImGui();
 
         // Swap buffers
         glfwSwapBuffers(window);
@@ -189,7 +190,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     // Cleanup
     FMODManager::getInstance().cleanup();
     CleanupScene();
-    CleanupImGui();
+    coreUI.CleanupImGui();
     TerminateGLFW();
     // Release the mutex when the application exits
     CloseHandle(hMutex);

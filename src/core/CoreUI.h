@@ -3,28 +3,30 @@
 
 #include <GLFW/glfw3.h>
 
-// Initializes ImGui with the specified GLFW window
-void InitImGui(GLFWwindow* window);
+class CoreUI {
+public:
+    CoreUI(); // Constructor
+    ~CoreUI(); // Destructor
 
-// Renders the ImGui frame, including the menu bar and other UI elements
-void RenderImGui();
+    void InitImGui(GLFWwindow* window);
+    void RenderImGui();
+    void CleanupImGui();
+    void DrawMenuBar();
+    void UpdateMainWindowSize(GLFWwindow* window);
+    void ShowAboutUI(); // Only keep this declaration here.
 
-// Cleans up ImGui resources
-void CleanupImGui();
+    // Flags for toggling the visibility of UI components
+    bool showAudioSelectionUI;
+    bool showDebugConsoleUI;
+    bool showAddAudioLibraryUI;
+    bool showDelAudioLibraryUI;
+    bool showSkinsUI;
+    bool showPreferencesUI;
+    bool showFeedbackUI;
+    bool showAboutmenuUI;
 
-// Draws the menu bar for UI toggles
-void DrawMenuBar();
-
-void UpdateMainWindowSize(GLFWwindow* window);
-
-// Flags for toggling the visibility of UI components
-extern bool showAudioSelectionUI;
-extern bool showDebugConsoleUI;
-extern bool showAddAudioLibraryUI;
-extern bool showDelAudioLibraryUI;
-extern bool showSkinsUI;
-extern bool showPreferencesUI;
-extern bool showFeedbackUI;
-extern bool showAboutUI;
+private:
+    bool isAboutUIVisible = false;  // Track if the About UI should be shown
+};
 
 #endif // CORE_UI_H

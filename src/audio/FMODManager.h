@@ -3,6 +3,9 @@
 
 #include <FMOD/fmod.hpp>
 #include <string>
+#include <vector>
+#include "AudioPlayer.h"
+
 
 class FMODManager {
 public:
@@ -33,10 +36,13 @@ public:
     FMOD::Sound* getSound() const;  // Make public
 
     // Placeholder for playlist functionality
-    void Previous();
-    void Next();
+    void Previous(AudioPlayer& audioPlayer);
+    void Next(AudioPlayer& audioPlayer);
 
     void GetSpectrum(float* spectrum, int numBands);
+
+    void SetAudioLibrary(const std::vector<std::string>& audioLibrary);
+    void SetCurrentTrackIndex(size_t index);
 
 private:
     FMODManager(); // Private constructor for singleton
@@ -50,6 +56,9 @@ private:
     bool isMuted; // Track mute status
 
     FMOD::DSP* fftDSP;
+
+    std::vector<std::string> audioLibrary;
+    size_t currentTrackIndex;
 };
 
 #endif // FMOD_MANAGER_H
